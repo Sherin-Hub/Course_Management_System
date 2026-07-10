@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – LMS Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-brand">
+    <div class="brand-dot">L</div>
+    LMS Portal
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="register.html">Register</a></li>
+    <li><a href="login.html" class="nav-btn">Login</a></li>
+  </ul>
+</nav>
+
+<!-- Auth page -->
+<div class="auth-page">
+  <div class="auth-wrap">
+
+    <!-- Left panel -->
+    <div class="auth-left">
+      <div class="auth-logo">L</div>
+      <h2>Welcome back to LMS Portal</h2>
+      <p>Sign in to continue your learning, check your progress, and access all your enrolled courses.</p>
+      <ul class="perks">
+        <li><span class="tick">✓</span> Pick up right where you left off</li>
+        <li><span class="tick">✓</span> View your enrolled courses</li>
+        <li><span class="tick">✓</span> Track completion progress</li>
+        <li><span class="tick">✓</span> Download your certificates</li>
+        <li><span class="tick">✓</span> Get latest notifications</li>
+      </ul>
+    </div>
+
+    <!-- Right panel -->
+    <div class="auth-right">
+      <div class="eyebrow">Sign in</div>
+      <h1>Welcome back</h1>
+      <p class="sub-text">Don't have an account? <a href="register.html">Register for free</a></p>
+
+      <form id="loginForm" novalidate>
+
+        <div class="field">
+          <label for="loginEmail">Email address</label>
+          <input id="loginEmail" type="email" placeholder="you@example.com" autocomplete="email" />
+          <span class="err-msg"></span>
+        </div>
+
+        <div class="field">
+          <label for="loginPassword">
+            Password
+            <a href="forgot-password.html" style="float:right;font-weight:600;color:#2563eb;font-size:12px;">Forgot password?</a>
+          </label>
+          <div class="input-wrap">
+            <input id="loginPassword" type="password" placeholder="Your password" autocomplete="current-password" />
+            <button type="button" class="toggle-pw" aria-label="Show password">👁</button>
+          </div>
+          <span class="err-msg"></span>
+        </div>
+
+        <div class="field" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <input id="rememberMe" type="checkbox" style="width:auto;" />
+          <label for="rememberMe" style="margin:0;font-size:13.5px;color:#64748b;cursor:pointer;">Remember me on this device</label>
+        </div>
+
+        <button type="submit" class="form-btn">Sign in →</button>
+      </form>
+
+      <div class="form-footer" style="margin-top:24px;">
+        New to LMS? <a href="register.html">Create a free account</a>
+      </div>
+
+      <!-- Demo hint -->
+      <div style="margin-top:18px;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;font-size:12.5px;color:#64748b;">
+        <strong style="color:#1a2e5a;">💡 Demo hint:</strong> Register an account first, then sign in. The demo stores accounts in your browser.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

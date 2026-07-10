@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register – LMS Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-brand">
+    <div class="brand-dot">L</div>
+    LMS Portal
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="register.html">Register</a></li>
+    <li><a href="login.html" class="nav-btn">Login</a></li>
+  </ul>
+</nav>
+
+<!-- Auth page -->
+<div class="auth-page">
+  <div class="auth-wrap">
+
+    <!-- Left panel -->
+    <div class="auth-left">
+      <div class="auth-logo">L</div>
+      <h2>Join thousands of learners</h2>
+      <p>Create your free account today and start exploring courses designed to advance your career and skills.</p>
+      <ul class="perks">
+        <li><span class="tick">✓</span> Access 350+ expert-led courses</li>
+        <li><span class="tick">✓</span> Learn at your own pace, anytime</li>
+        <li><span class="tick">✓</span> Earn verified certificates</li>
+        <li><span class="tick">✓</span> Track your progress with dashboards</li>
+        <li><span class="tick">✓</span> Free registration, no credit card</li>
+      </ul>
+    </div>
+
+    <!-- Right panel -->
+    <div class="auth-right">
+      <div class="eyebrow">New account</div>
+      <h1>Create your account</h1>
+      <p class="sub-text">Already have an account? <a href="login.html">Sign in instead</a></p>
+
+      <!-- Role selector -->
+      <div class="role-tabs">
+        <button class="role-tab active" type="button" data-role="student">🎓 Student</button>
+        <button class="role-tab"        type="button" data-role="admin">🛡️ Admin</button>
+      </div>
+      <input type="hidden" id="roleInput" value="student" />
+
+      <form id="registerForm" novalidate>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="regName">Full name</label>
+            <input id="regName" type="text" placeholder="e.g. Aditi Sharma" autocomplete="name" />
+            <span class="err-msg"></span>
+          </div>
+          <div class="field">
+            <label for="regPhone">Mobile number</label>
+            <input id="regPhone" type="tel" placeholder="10-digit number" autocomplete="tel" />
+            <span class="err-msg"></span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="regEmail">Email address</label>
+          <input id="regEmail" type="email" placeholder="you@example.com" autocomplete="email" />
+          <span class="err-msg"></span>
+        </div>
+
+        <div class="field">
+          <label for="regPassword">Password</label>
+          <div class="input-wrap">
+            <input id="regPassword" type="password" placeholder="Min. 8 characters" autocomplete="new-password" />
+            <button type="button" class="toggle-pw" aria-label="Show password">👁</button>
+          </div>
+          <div class="pw-strength">
+            <div class="pw-strength-bar"><div class="pw-strength-fill" id="strengthFill"></div></div>
+            <span class="pw-strength-label" id="strengthLabel"></span>
+          </div>
+          <span class="err-msg"></span>
+        </div>
+
+        <div class="field">
+          <label for="regConfirm">Confirm password</label>
+          <div class="input-wrap">
+            <input id="regConfirm" type="password" placeholder="Re-enter password" autocomplete="new-password" />
+            <button type="button" class="toggle-pw" aria-label="Show password">👁</button>
+          </div>
+          <span class="err-msg"></span>
+        </div>
+
+        <button type="submit" class="form-btn">Create account →</button>
+      </form>
+
+      <div class="form-footer">
+        By registering you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
