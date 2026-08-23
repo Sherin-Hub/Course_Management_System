@@ -1,188 +1,140 @@
-# Course_Management_System
-Project Title
-Student Course Management and Learning Progress Tracking System
-1. Project Overview
-The Student Course Management and Learning Progress Tracking System is a full-stack web application designed to streamline academic course enrollment and learning management. The system allows students to create accounts, browse available courses, enroll in courses, access course materials, track their learning progress, and receive updates regarding their courses.
-The application also provides administrators with tools to manage students, courses, enrollments, and progress reports.
-This project is ideal for a Full Stack Web Development course because it covers frontend development, backend APIs, database management, authentication, deployment, and security.
+# LMS Portal — Learning Management System (Frontend)
 
-2. Problem Statement
-In many educational institutions, students struggle to:
-•	Find available courses 
-•	Register for courses efficiently 
-•	Monitor learning progress 
-•	Access course information in one place 
-•	Track completed and pending modules 
-Administrators face difficulties in managing course enrollments and monitoring student performance.
-The proposed system solves these problems through a centralized web-based platform.
+A fully responsive, client-side Learning Management System portal with account
+registration, authentication, password recovery, and an interactive student
+dashboard — built with plain HTML, CSS, and JavaScript (no frameworks, no
+build step).
 
-3. Project Objectives
-1.	Provide secure student registration and login. 
-2.	Allow students to view and enroll in courses. 
-3.	Enable administrators to create and manage courses. 
-4.	Track student learning progress. 
-5.	Generate progress reports. 
-6.	Provide real-time notifications and updates. 
-7.	Maintain secure access to academic data. 
+---
 
-4. User Roles
-Student
-Students can:
-•	Register and login 
-•	View profile 
-•	Browse courses 
-•	Enroll in courses 
-•	Access course content 
-•	Track progress 
-•	View completion percentage 
-•	Receive notifications 
+## 1. Problem Statement
 
-Administrator
-Administrators can:
-•	Login securely 
-•	Add/Edit/Delete courses 
-•	Manage students 
-•	Monitor enrollments 
-•	Generate reports 
-•	Update course content 
-•	View analytics dashboard 
+Small training providers, bootcamps, and independent instructors often need a
+clean, professional-looking student portal but can't justify the cost or
+complexity of a full LMS platform (Moodle, Canvas, etc.) just to prototype an
+idea, run a demo, or serve a small cohort. Existing solutions are either too
+heavyweight to stand up quickly or too generic to feel like a real product.
 
-5. System Modules
-Module 1: User Authentication
-Features
-•	Student Registration 
-•	Student Login 
-•	Password Encryption 
-•	Forgot Password 
-•	JWT Authentication 
-Database Fields
-Field	Type
-Student ID	Integer
-Name	String
-Email	String
-Password	Encrypted String
-Department	String
+**LMS Portal** solves this by providing a complete, self-contained front-end
+experience — landing page, registration, login, password recovery, and a
+student dashboard — that runs entirely in the browser with zero backend
+dependency. It's designed to be either used as-is for a demo/prototype, or
+used as the front-end layer that a real backend (Node/Express, Django,
+Laravel, etc.) can be dropped in behind later.
 
-Module 2: Course Management
-Features
-•	Add Course 
-•	Update Course 
-•	Delete Course 
-•	View Course Details 
-Course Information
-Field	Description
-Course ID	Unique ID
-Course Name	Course Title
-Instructor	Faculty Name
-Duration	Number of Weeks
-Description	Course Information
-Category	Programming, AI, Web, etc.
+## 2. Features
 
-Module 3: Course Enrollment
-Features
-•	Browse Courses 
-•	Search Courses 
-•	Enroll in Course 
-•	View Enrolled Courses 
-Workflow
-Student Login → Browse Courses → Select Course → Enroll → Confirmation
+- **Marketing home page** — hero section, platform stats, feature grid, and
+  a call-to-action, written to explain the product rather than just show
+  placeholder content.
+- **Account registration** with role selection (Student / Admin), live field
+  validation, and a real-time password strength meter.
+- **Login** with "remember me," show/hide password, and a link into password
+  recovery.
+- **Forgot / reset password flow** — email lookup → 6-digit OTP entry
+  (auto-advancing input boxes) → new password with strength meter — all
+  gated so a person can't land on the reset screen without going through the
+  request step.
+- **Student dashboard** — dynamic greeting, avatar initials, enrollment
+  stats, a course list with SVG progress rings, and a recent-activity feed,
+  all generated from the logged-in account.
+- **Dynamic navigation** — the top nav swaps between "Register / Login" and
+  "Dashboard" depending on whether someone is signed in, and the dashboard
+  route redirects to login if there's no active session.
+- **Client-side validation** on every form: required fields, email format,
+  10-digit phone numbers, password length/strength, and confirm-password
+  matching, with inline error messages and accessible focus states.
+- **Toast notifications** for success/error feedback instead of blocking
+  `alert()` calls.
+- **Fully responsive** — usable from a 360px phone up through desktop, with
+  a collapsing dashboard sidebar and stacking auth panels on small screens.
 
-Module 4: Learning Management
-Features
-•	View Modules 
-•	Access Learning Materials 
-•	Mark Module as Completed 
-•	Continue Learning 
-Example
-Course: Full Stack Development
-Modules:
-•	HTML 
-•	CSS 
-•	JavaScript 
-•	React 
-•	Node.js 
-•	MongoDB 
-Students complete modules one by one.
+## 3. Tech Stack
 
-Module 5: Progress Tracking
-Features
-•	Completion Percentage 
-•	Course Progress Bar 
-•	Completed Modules 
-•	Pending Modules 
-Example
-Course	Progress
-Python	80%
-React	60%
-DBMS	100%
+| Layer          | Choice                                              |
+|----------------|------------------------------------------------------|
+| Markup         | Semantic HTML5 (6 pages)                            |
+| Styling        | Hand-written CSS3 (custom properties / design tokens, Grid & Flexbox, no framework) |
+| Typography     | [Fraunces](https://fonts.google.com/specimen/Fraunces) (display) + [Inter](https://fonts.google.com/specimen/Inter) (body), via Google Fonts |
+| Interactivity  | Vanilla JavaScript (ES6+), organized into small modules (`Storage`, `Validate`, `UI`, `Nav`, `Auth`, `Dashboard`) |
+| Persistence    | `localStorage` (accounts, session, per-user course/activity data) — a stand-in for a real backend/database |
+| Tooling        | None required — no build step, no bundler, no `npm install` |
 
-Module 6: Dashboard
-Student Dashboard
-Displays:
-•	Total Courses Enrolled 
-•	Courses Completed 
-•	Ongoing Courses 
-•	Progress Statistics 
-Admin Dashboard
-Displays:
-•	Total Students 
-•	Total Courses 
-•	Active Enrollments 
-•	Completion Reports 
+> This is intentionally a **frontend-only** project. Accounts and sessions
+> live in the browser's `localStorage`, which is great for demos and
+> prototyping but is not a substitute for real authentication — see
+> [Connecting a real backend](#6-connecting-a-real-backend) below.
 
-Module 7: Notifications
-Features
-•	New Course Alerts 
-•	Enrollment Confirmation 
-•	Assignment Reminders 
-•	Completion Certificates 
-Implementation using:
-•	WebSockets 
-•	Socket.IO 
+## 4. Project Structure
 
-6. Database Design
-Students Table
-Field
-student_id
-name
-email
-password
-department
+```
+lms-portal/
+├── index.html              # Marketing home page
+├── login.html               # Sign in
+├── register.html            # Create account (Student / Admin)
+├── forgot-password.html     # Step 1 of password recovery — request a code
+├── reset-password.html      # Step 2 of password recovery — OTP + new password
+├── dashboard.html            # Authenticated student dashboard
+├── css/
+│   └── style.css            # Design tokens + all page styles, responsive
+├── js/
+│   └── script.js             # LMS.* modules + per-page wiring
+├── docs/                    # (optional) space for screenshots, diagrams
+└── README.md
+```
 
-Courses Table
-Field
-course_id
-course_name
-instructor
-duration
-description
+## 5. Getting Started
 
-Enrollment Table
-Field
-enrollment_id
-student_id
-course_id
-enrollment_date
+No build tools needed.
 
-Progress Table
-Field
-progress_id
-student_id
-course_id
-completed_modules
-progress_percentage
+```bash
+git clone https://github.com/<your-username>/lms-portal.git
+cd lms-portal
+```
 
+Then just open `index.html` in a browser, **or** serve it locally (recommended,
+so relative paths behave exactly like production):
 
+```bash
+# Python
+python3 -m http.server 5500
 
+# or Node
+npx serve .
+```
 
+Visit `http://localhost:5500`.
 
-Layer	Technology
-Frontend	HTML5, CSS3, Bootstrap, JavaScript, React.js
-Backend	Node.js, Express.js
-Database	MongoDB
-Authentication	JWT, bcrypt
-Real-time Communication	Socket.IO
-API Testing	Postman
-Version Control	Git, GitHub
-Deployment	Render / Vercel / Railway
+### Try the demo flow
 
+1. Go to **Register**, create an account (any real-looking email works).
+2. You're taken straight to the **Dashboard**.
+3. Log out, then log back in from **Login** with the same credentials.
+4. Try **Forgot password** → use the demo code `123456` on the reset screen.
+
+## 6. Connecting a Real Backend
+
+The whole app talks to persistence through one module — `LMS.Storage` in
+`js/script.js`. To move off `localStorage`:
+
+1. Replace the methods in `Storage` (`addUser`, `findUserByEmail`,
+   `setSession`, `getCourseData`, etc.) with `fetch()` calls to your API.
+2. Keep every other module (`Validate`, `UI`, `Nav`, `Auth`, `Dashboard`)
+   as-is — they only ever call `Storage`, never touch `localStorage`
+   directly, so the swap is isolated to one file.
+3. Move password verification and OTP generation/checking server-side —
+   the current OTP (`123456`) and password obfuscation are demo-only and
+   must not be used in production.
+
+## 7. Roadmap Ideas
+
+- Real backend + database (Node/Express + PostgreSQL, or similar)
+- Course catalog and enrollment pages (currently seeded demo data)
+- Email delivery for the OTP instead of a fixed demo code
+- Admin role dashboard (the register page already captures the role)
+- Automated tests for the validation and auth modules
+
+## License
+
+This project is provided as a learning/demo template — feel free to fork,
+modify, and use it as the starting point for your own LMS project.
