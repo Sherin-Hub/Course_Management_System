@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – LMS Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-brand">
+    <div class="brand-dot">L</div>
+    LMS Portal
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="dashboard.html" class="nav-btn nav-primary">Dashboard</a></li>
+  </ul>
+</nav>
+
+<div class="dash-shell" id="dashShell">
+
+  <!-- Sidebar -->
+  <aside class="dash-sidebar">
+    <div class="dash-user">
+      <div class="dash-avatar" id="dashAvatar">--</div>
+      <div>
+        <div class="dash-user-name" id="dashUserName">Loading…</div>
+        <div class="dash-user-role" id="dashUserRole">student</div>
+      </div>
+    </div>
+    <nav class="dash-nav">
+      <a href="dashboard.html" class="active">🏠 Overview</a>
+      <a href="#" onclick="return false;">📚 My Courses</a>
+      <a href="#" onclick="return false;">📜 Certificates</a>
+      <a href="#" onclick="return false;">🔔 Notifications</a>
+      <a href="#" onclick="return false;">⚙️ Settings</a>
+      <a href="login.html" id="logoutLink" class="logout-link">↩ Log out</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="dash-main">
+    <div class="dash-header">
+      <div>
+        <h1 id="dashGreeting">Welcome back 👋</h1>
+        <p>Here's what's happening with your learning today.</p>
+      </div>
+    </div>
+
+    <div class="dash-stats">
+      <div class="dash-stat-card">
+        <div class="dsc-icon">📚</div>
+        <div class="dsc-num" id="statCourses">0</div>
+        <div class="dsc-lbl">Enrolled courses</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dsc-icon">✅</div>
+        <div class="dsc-num" id="statCompleted">0</div>
+        <div class="dsc-lbl">Completed</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dsc-icon">📈</div>
+        <div class="dsc-num" id="statProgress">0%</div>
+        <div class="dsc-lbl">Avg. progress</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dsc-icon">📜</div>
+        <div class="dsc-num" id="statCerts">0</div>
+        <div class="dsc-lbl">Certificates</div>
+      </div>
+    </div>
+
+    <div class="dash-block">
+      <div class="dash-block-head">
+        <h2>Continue learning</h2>
+        <a href="#" onclick="return false;">View all courses</a>
+      </div>
+      <div class="course-list" id="courseList"></div>
+    </div>
+
+    <div class="dash-block">
+      <div class="dash-block-head">
+        <h2>Recent activity</h2>
+      </div>
+      <div id="activityList"></div>
+    </div>
+  </main>
+
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
