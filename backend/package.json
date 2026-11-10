@@ -1,0 +1,35 @@
+{
+  "name": "lms-portal-backend",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Express + MongoDB + Socket.IO backend for LMS Portal: auth (bcrypt + JWT), profile, courses, real-time chat and notifications, validation and security hardening",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node seed.js",
+    "smoke": "node smoke-test.js",
+    "test:socket": "node socket-test.js",
+    "test:security": "node security-test.js",
+    "create-admin": "node scripts/createAdmin.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.7.3",
+    "express-validator": "^7.3.2",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.24.7",
+    "morgan": "^1.12.1",
+    "socket.io": "^4.8.4"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

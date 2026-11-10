@@ -1,0 +1,42 @@
+# OPTIONAL: Render "Blueprint" that creates both backend services in one go
+# (Render dashboard -> New -> Blueprint -> pick this repo).
+# You can ignore this file and create the services by hand instead:
+# docs/deployment-guide.md explains both ways.
+#
+# Secrets (sync: false) are NOT stored here: Render asks you for them.
+services:
+  # Express + Socket.IO + MongoDB Atlas
+  - type: web
+    name: lms-portal-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI          # your Atlas connection string
+        sync: false
+      - key: JWT_SECRET         # Render generates a strong random value
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1h
+      - key: CLIENT_URL         # your Vercel URL, no trailing slash
+        sync: false
+
+  # json-server demo API (enrollments, activities, admin records)
+  - type: web
+    name: lms-portal-mock-api
+    runtime: node
+    rootDir: mock-api
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_URL         # your Vercel URL, no trailing slash
+        sync: false

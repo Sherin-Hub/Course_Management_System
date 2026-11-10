@@ -1,0 +1,17 @@
+{
+  "name": "lms-portal-mock-api",
+  "private": true,
+  "version": "1.1.0",
+  "description": "json-server demo API (enrollments, activities, admin records)",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "json-server --watch db.json --port 5001"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "json-server": "^0.17.4"
+  }
+}

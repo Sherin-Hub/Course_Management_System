@@ -1,0 +1,140 @@
+{
+  "admins": [
+    {
+      "id": "a1",
+      "name": "LMS Admin",
+      "email": "admin@example.com",
+      "phone": "9876543210",
+      "password": "admin123",
+      "role": "admin"
+    }
+  ],
+  "students": [
+    {
+      "id": "s1",
+      "name": "Demo Student",
+      "email": "student@example.com",
+      "phone": "9876543210",
+      "password": "student123",
+      "role": "student"
+    }
+  ],
+  "courses": [
+    {
+      "id": "c1",
+      "title": "Python Programming",
+      "icon": "🐍",
+      "category": "Programming"
+    },
+    {
+      "id": "c2",
+      "title": "Modern Web Development",
+      "icon": "🌐",
+      "category": "Programming"
+    },
+    {
+      "id": "c3",
+      "title": "UI / UX Design Foundations",
+      "icon": "🎨",
+      "category": "Design"
+    },
+    {
+      "id": "c4",
+      "title": "Data Analysis with SQL",
+      "icon": "📊",
+      "category": "Data"
+    },
+    {
+      "id": "c5",
+      "title": "Machine Learning Basics",
+      "icon": "🤖",
+      "category": "Data"
+    },
+    {
+      "id": "c6",
+      "title": "Project Management Essentials",
+      "icon": "🗂️",
+      "category": "Business"
+    }
+  ],
+  "enrollments": [
+    {
+      "id": "e1",
+      "studentEmail": "student@example.com",
+      "courseId": "c1",
+      "progress": 78,
+      "status": "in-progress",
+      "lastLesson": "Working with dictionaries"
+    },
+    {
+      "id": "e2",
+      "studentEmail": "student@example.com",
+      "courseId": "c2",
+      "progress": 45,
+      "status": "in-progress",
+      "lastLesson": "Flexbox & Grid layouts"
+    },
+    {
+      "id": "e3",
+      "studentEmail": "student@example.com",
+      "courseId": "c3",
+      "progress": 100,
+      "status": "completed",
+      "lastLesson": "Final portfolio review"
+    },
+    {
+      "id": "e4",
+      "studentEmail": "student@example.com",
+      "courseId": "c4",
+      "progress": 20,
+      "status": "in-progress",
+      "lastLesson": "Writing your first JOIN"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act1",
+      "studentEmail": "student@example.com",
+      "text": "Completed \"UI / UX Design Foundations\"",
+      "time": "2026-09-29T20:00:00.000Z"
+    },
+    {
+      "id": "act2",
+      "studentEmail": "student@example.com",
+      "text": "Started \"Data Analysis with SQL\"",
+      "time": "2026-09-28T20:00:00.000Z"
+    },
+    {
+      "id": "act3",
+      "studentEmail": "student@example.com",
+      "text": "Account created",
+      "time": "2026-09-27T20:00:00.000Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "n1",
+      "studentEmail": "student@example.com",
+      "title": "Assignment due soon",
+      "body": "\"Data Analysis with SQL\" — Module 3 quiz is due in 2 days.",
+      "time": "2026-09-30T15:45:00.000Z",
+      "read": false
+    },
+    {
+      "id": "n2",
+      "studentEmail": "student@example.com",
+      "title": "Certificate ready",
+      "body": "Your certificate for \"UI / UX Design Foundations\" is ready to download.",
+      "time": "2026-09-29T20:00:00.000Z",
+      "read": false
+    },
+    {
+      "id": "n3",
+      "studentEmail": "student@example.com",
+      "title": "New course added",
+      "body": "\"Machine Learning Basics\" was just added to the catalog.",
+      "time": "2026-09-28T18:00:00.000Z",
+      "read": true
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+# Dependencies, builds, logs
+node_modules/
+dist/
+coverage/
+*.log
+
+# Secrets: never commit real values. Only .env.example files are tracked.
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
