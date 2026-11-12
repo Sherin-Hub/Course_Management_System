@@ -1,5 +1,16 @@
 import api from "../services/api";
 import { fetchCourses } from "../api/courseApi";
+import {
+  createStudentApi,
+  deleteStudentApi,
+  enrollApi,
+  fetchMyEnrollments,
+  fetchStudentsApi,
+  hasApiSession,
+  saveProgressApi,
+  unenrollApi,
+  updateStudentApi,
+} from "../api/lmsApi";
 
 const SESSION_KEY = "lms_session";
 
@@ -14,7 +25,10 @@ function normalizeEmail(email) {
   return email.trim().toLowerCase();
 }
 
+// Admin student records: MongoDB for admins who logged in through the API,
+// the json-server mock API for old demo admins.
 export async function getStudents() {
+  if (hasApiSession()) return fetchStudentsApi();
   return api.get("/students");
 }
 
@@ -33,6 +47,7 @@ export async function findAdminByEmail(email) {
 }
 
 export async function addStudent(student) {
+  if (hasApiSession()) return createStudentApi(student);
   const existing = await findStudentByEmail(student.email);
   if (existing) throw new Error("A student with this email already exists.");
   return api.post("/students", { ...student, role: "student" });
@@ -43,6 +58,7 @@ export async function addAdmin(admin) {
 }
 
 export async function updateStudent(id, patch) {
+  if (hasApiSession()) return updateStudentApi(id, patch);
   const current = await api.get(`/students/${id}`);
   const updated = await api.patch(`/students/${id}`, patch);
 
@@ -73,6 +89,10 @@ export async function updateStudent(id, patch) {
 }
 
 export async function deleteStudent(id) {
+  if (hasApiSession()) {
+    await deleteStudentApi(id);
+    return true;
+  }
   const student = await api.get(`/students/${id}`);
   const enrollments = await api.get(
     `/enrollments?studentEmail=${encodeURIComponent(student.email)}`
@@ -107,7 +127,60 @@ export async function getCurrentUser() {
 }
 
 // The course catalog lives in the Express backend (GET /api/v1/courses is public).
-// Enrollments, activity and notifications still come from the mock API.
+// For accounts that logged in through the API, enrollments, progress, activity
+// and notifications are stored in MongoDB too. Only old demo accounts (no JWT)
+// still use the json-server mock API for those.
+// ---------------------------------------------------------------------------
+// MongoDB helpers
+// ---------------------------------------------------------------------------
+function enrollmentToCard(item) {
+  return {
+    id: item.courseId,
+    enrollmentId: item.id,
+    title: item.course.title,
+    icon: item.course.icon,
+    category: item.course.category,
+    progress: item.progressPercentage,
+    status: item.status === "completed" ? "completed" : "in-progress",
+    lastLesson:
+      item.completedLessons > 0
+        ? `Lesson ${item.completedLessons} of ${item.totalLessons}`
+        : "Not started yet",
+    completedLessons: item.completedLessons,
+    totalLessons: item.totalLessons,
+  };
+}
+
+async function getApiCourses() {
+  const enrollments = await fetchMyEnrollments();
+  return enrollments.filter((item) => item.status !== "withdrawn").map(enrollmentToCard);
+}
+
+// "Recent activity" is built from the saved enrollments (no extra collection needed).
+async function getApiActivity() {
+  const enrollments = await fetchMyEnrollments();
+  const events = [];
+
+  for (const item of enrollments) {
+    const title = item.course.title;
+    events.push({ id: `enrolled-${item.id}`, text: `Enrolled in "${title}"`, time: item.enrolledAt });
+
+    if (item.status === "withdrawn") {
+      events.push({ id: `left-${item.id}`, text: `Left "${title}"`, time: item.updatedAt });
+    } else if (item.completedLessons > 0 && item.progressUpdatedAt) {
+      events.push({
+        id: `progress-${item.id}`,
+        text:
+          item.status === "completed"
+            ? `Completed "${title}"`
+            : `Progress updated on "${title}" (${item.progressPercentage}%)`,
+        time: item.progressUpdatedAt,
+      });
+    }
+  }
+
+  return events.sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 10);
+}
 async function getCoursesCatalog() {
   return fetchCourses();
 }
@@ -148,6 +221,7 @@ function mergeCourses(courses, enrollments) {
 }
 
 export async function getCourses(email) {
+  if (hasApiSession()) return getApiCourses();
   const [courses, enrollments] = await Promise.all([
     getCoursesCatalog(),
     seedStudentCourses(email),
@@ -156,6 +230,11 @@ export async function getCourses(email) {
 }
 
 export async function availableCoursesToAdd(email) {
+  if (hasApiSession()) {
+    const [catalog, mine] = await Promise.all([getCoursesCatalog(), fetchMyEnrollments()]);
+    const owned = new Set(mine.filter((item) => item.status !== "withdrawn").map((item) => item.courseId));
+    return catalog.filter((course) => !owned.has(course.id));
+  }
   const [courses, enrollments] = await Promise.all([
     getCoursesCatalog(),
     getEnrollments(email),
@@ -165,6 +244,10 @@ export async function availableCoursesToAdd(email) {
 }
 
 export async function enrollInCourse(email, courseId) {
+  if (hasApiSession()) {
+    await enrollApi(courseId);
+    return getApiCourses();
+  }
   const courses = await getCoursesCatalog();
   const course = courses.find((item) => item.id === courseId);
   if (!course) throw new Error("Course not found.");
@@ -191,6 +274,10 @@ export async function enrollInCourse(email, courseId) {
 }
 
 export async function updateCourseProgress(email, courseId, progress) {
+  if (hasApiSession()) {
+    await saveProgressApi(courseId, Math.max(0, Math.min(100, Math.round(progress))));
+    return getApiCourses();
+  }
   const enrollments = await getEnrollments(email);
   const enrollment = enrollments.find((item) => item.courseId === courseId);
   if (!enrollment) return getCourses(email);
@@ -213,7 +300,21 @@ export async function updateCourseProgress(email, courseId, progress) {
   return getCourses(email);
 }
 
+// Leave a course (MongoDB: status "withdrawn", the history is kept).
+export async function unenrollFromCourse(email, courseId) {
+  if (hasApiSession()) {
+    await unenrollApi(courseId);
+    return getApiCourses();
+  }
+  const existing = await api.get(
+    `/enrollments?studentEmail=${encodeURIComponent(normalizeEmail(email))}&courseId=${encodeURIComponent(courseId)}`
+  );
+  await Promise.all(existing.map((item) => api.delete(`/enrollments/${item.id}`)));
+  return getCourses(email);
+}
+
 export async function getActivity(email) {
+  if (hasApiSession()) return getApiActivity();
   return api.get(`/activities?studentEmail=${encodeURIComponent(normalizeEmail(email))}&_sort=time&_order=desc`);
 }
 

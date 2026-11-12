@@ -1,4 +1,5 @@
 const Course = require("../models/Course");
+const { cleanupCourse } = require("./enrollmentService");
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
@@ -75,6 +76,7 @@ async function updateCourse(id, { title, icon, category }) {
 async function deleteCourse(id) {
   const course = await Course.findByIdAndDelete(id);
   if (!course) throw notFound();
+  await cleanupCourse(id); // enrollments and progress for a deleted course
   return course;
 }
 

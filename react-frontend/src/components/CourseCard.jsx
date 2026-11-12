@@ -21,7 +21,7 @@ function ProgressRing({ progress, size = 52 }) {
   );
 }
 
-export default function CourseCard({ course, onContinue, compact = false }) {
+export default function CourseCard({ course, onContinue, onUnenroll, compact = false }) {
   return (
     <div className={`course-card${compact ? " compact" : ""}`}>
       <div className="course-card-icon">{course.icon}</div>
@@ -37,6 +37,11 @@ export default function CourseCard({ course, onContinue, compact = false }) {
         {onContinue && (
           <button className="course-card-btn" onClick={() => onContinue(course)}>
             {course.status === "completed" ? "Review course" : "Continue learning"} →
+          </button>
+        )}
+        {onUnenroll && (
+          <button className="link-btn" type="button" onClick={() => onUnenroll(course)}>
+            Unenroll
           </button>
         )}
       </div>

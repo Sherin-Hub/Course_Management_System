@@ -5,6 +5,7 @@ import {
   availableCoursesToAdd,
   enrollInCourse,
   getCourses,
+  unenrollFromCourse,
   updateCourseProgress,
 } from "../../lib/storage";
 import CourseCard from "../../components/CourseCard";
@@ -32,8 +33,8 @@ export default function MyCourses() {
       setCourses(courseData);
       setCatalog(catalogData);
       setError("");
-    } catch {
-      setError("Unable to load courses. Please make sure the Mock API is running.");
+    } catch (err) {
+      setError(err.message || "Unable to load courses. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -44,9 +45,15 @@ export default function MyCourses() {
   }, [user.email]);
 
   async function handleContinue(course) {
+    // A finished course stays finished: "Review course" never wipes the certificate.
+    if (course.status === "completed") {
+      showToast(`You already completed "${course.title}". Well done!`, "info");
+      return;
+    }
+
     try {
       setActionLoading(true);
-      const bump = course.status === "completed" ? 0 : Math.min(100, course.progress + 15);
+      const bump = Math.min(100, course.progress + 15);
       const updated = await updateCourseProgress(user.email, course.id, bump);
       setCourses(updated);
       if (bump >= 100) {
@@ -54,8 +61,8 @@ export default function MyCourses() {
       } else {
         showToast(`Progress saved — ${bump}% on "${course.title}"`, "info");
       }
-    } catch {
-      showToast("Could not save progress.", "error");
+    } catch (err) {
+      showToast(err.message || "Could not save progress.", "error");
     } finally {
       setActionLoading(false);
     }
@@ -69,8 +76,23 @@ export default function MyCourses() {
       setCatalog(await availableCoursesToAdd(user.email));
       showToast(`Enrolled in "${title}"`, "success");
       setShowCatalog(false);
-    } catch {
-      showToast("Could not enroll in this course.", "error");
+    } catch (err) {
+      showToast(err.message || "Could not enroll in this course.", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  async function handleUnenroll(course) {
+    if (!window.confirm(`Unenroll from "${course.title}"? Your progress is kept if you enroll again.`)) return;
+
+    try {
+      setActionLoading(true);
+      setCourses(await unenrollFromCourse(user.email, course.id));
+      setCatalog(await availableCoursesToAdd(user.email));
+      showToast(`You left "${course.title}"`, "info");
+    } catch (err) {
+      showToast(err.message || "Could not unenroll.", "error");
     } finally {
       setActionLoading(false);
     }
@@ -138,9 +160,15 @@ export default function MyCourses() {
       </div>
 
       <div className="course-grid">
-        {visible.length === 0 && <p className="empty-hint">Nothing here yet.</p>}
+        {visible.length === 0 && (
+          <p className="empty-hint">
+            {courses.length === 0
+              ? "You are not enrolled in any course yet. Click \"+ Enroll in a course\" to browse the catalog."
+              : "Nothing here yet."}
+          </p>
+        )}
         {visible.map((c) => (
-          <CourseCard key={c.id} course={c} onContinue={handleContinue} />
+          <CourseCard key={c.id} course={c} onContinue={handleContinue} onUnenroll={handleUnenroll} />
         ))}
       </div>
     </>

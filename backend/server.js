@@ -16,6 +16,10 @@ const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const enrollmentRoutes = require("./routes/enrollmentRoutes");
+const learningProgressRoutes = require("./routes/learningProgressRoutes");
+const studentRoutes = require("./routes/studentRoutes");
+const { ensureStarterCourses } = require("./config/starterCourses");
 const notFoundMiddleware = require("./middleware/notFoundMiddleware");
 const errorHandler = require("./middleware/errorHandler");
 
@@ -73,6 +77,11 @@ app.use("/api/v1/auth", authRoutes);
 
 // Logged-in student's own profile.
 app.use("/api/v1/profile", profileRoutes);
+
+// Enrollments, learning progress and student records (all stored in MongoDB).
+app.use("/api/v1/enrollments", enrollmentRoutes);
+app.use("/api/v1/progress", learningProgressRoutes);
+app.use("/api/v1/students", studentRoutes); // admin only
 
 // Task 13: chat history and notifications (JWT required).
 app.use("/api/v1/messages", messageRoutes);
@@ -176,6 +185,10 @@ async function startServer() {
     await Promise.all(Object.values(models).map((model) => model.init()));
 
     io = initializeSocket(server);
+    app.set("io", io); // lets controllers push live notifications
+
+    // Fresh database? Add the starter courses so students can browse and enroll.
+    await ensureStarterCourses();
 
     // There must be only ONE listener on the port: the HTTP server that
     // carries both Express and Socket.IO.

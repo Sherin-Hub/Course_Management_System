@@ -5,16 +5,8 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const connectDB = require("./config/db");
-const { User, Course } = require("./models");
-
-const COURSES = [
-  { title: "Python Programming", icon: "🐍", category: "Programming" },
-  { title: "Modern Web Development", icon: "🌐", category: "Programming" },
-  { title: "UI / UX Design Foundations", icon: "🎨", category: "Design" },
-  { title: "Data Analysis with SQL", icon: "📊", category: "Data" },
-  { title: "Machine Learning Basics", icon: "🤖", category: "Data" },
-  { title: "Project Management Essentials", icon: "🗂️", category: "Business" },
-];
+const { User } = require("./models");
+const { STARTER_COURSES, seedMissingCourses } = require("./config/starterCourses");
 
 const ADMIN = {
   name: "LMS Admin",
@@ -27,13 +19,7 @@ async function seed() {
   await connectDB();
 
   // Courses: inserted in order, matched by title so re-running adds nothing.
-  let addedCourses = 0;
-  for (const course of COURSES) {
-    if (!(await Course.exists({ title: course.title }))) {
-      await Course.create(course);
-      addedCourses += 1;
-    }
-  }
+  const addedCourses = await seedMissingCourses();
 
   // Admin account: created once, an existing one is never overwritten.
   // In production the demo password "admin123" is never used: set ADMIN_PASSWORD
@@ -56,7 +42,7 @@ async function seed() {
     adminCreated = true;
   }
 
-  console.log(`Courses added: ${addedCourses} (of ${COURSES.length})`);
+  console.log(`Courses added: ${addedCourses} (of ${STARTER_COURSES.length})`);
   if (adminCreated) {
     console.log(`Admin created: ${ADMIN.email} (change this password before sharing the project)`);
   } else if (!defaultPasswordInProduction) {

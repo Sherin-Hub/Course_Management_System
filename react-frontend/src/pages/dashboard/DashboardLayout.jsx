@@ -10,7 +10,6 @@ import { NOTIFICATIONS_CHANGED } from "../../components/Notifications";
 const NAV_ITEMS = [
   { to: "/dashboard", end: true, icon: "🏠", label: "Overview" },
   { to: "/dashboard/courses", icon: "📚", label: "My Courses" },
-  { to: "/dashboard/manage-courses", icon: "🛠️", label: "Manage Courses", adminOnly: true },
   { to: "/dashboard/certificates", icon: "📜", label: "Certificates" },
   { to: "/dashboard/chat", icon: "💬", label: "Chat" },
   { to: "/dashboard/notifications", icon: "🔔", label: "Notifications" },
@@ -35,7 +34,8 @@ export default function DashboardLayout() {
 
   useEffect(() => {
     let active = true;
-    if (!user) return undefined;
+    // API accounts use the live MongoDB notifications below, not the mock API.
+    if (!user || user.authSource === "api") return undefined;
     getNotifications(user.email)
       .then((items) => {
         if (active) setUnread(items.filter((n) => !n.read).length);

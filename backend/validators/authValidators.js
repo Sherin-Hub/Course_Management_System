@@ -80,5 +80,6 @@ const loginValidation = [
 
 module.exports = {
   registerValidation,
-  loginValidation
+  loginValidation,
+  NORMALIZE
 };

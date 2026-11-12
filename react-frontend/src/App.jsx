@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -6,11 +6,11 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminCourses from "./pages/AdminCourses";
 
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import Overview from "./pages/dashboard/Overview";
 import MyCourses from "./pages/dashboard/MyCourses";
-import ManageCourses from "./pages/dashboard/ManageCourses";
 import Certificates from "./pages/dashboard/Certificates";
 import Notifications from "./pages/dashboard/Notifications";
 import ChatPage from "./pages/dashboard/ChatPage";
@@ -38,6 +38,18 @@ export default function App() {
       />
 
       <Route
+        path="/admin/courses"
+        element={
+          <AdminRoute>
+            <AdminCourses />
+          </AdminRoute>
+        }
+      />
+
+      {/* Old address of the course page: send people to the new one. */}
+      <Route path="/dashboard/manage-courses" element={<Navigate to="/admin/courses" replace />} />
+
+      <Route
         path="/dashboard"
         element={
           <ProtectedRoute>
@@ -47,7 +59,6 @@ export default function App() {
       >
         <Route index element={<Overview />} />
         <Route path="courses" element={<MyCourses />} />
-        <Route path="manage-courses" element={<ManageCourses />} />
         <Route path="certificates" element={<Certificates />} />
         <Route path="chat" element={<ChatPage />} />
         <Route path="notifications" element={<Notifications />} />

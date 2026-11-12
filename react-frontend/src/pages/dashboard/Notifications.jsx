@@ -94,14 +94,22 @@ export default function Notifications() {
   const { user } = useAuth();
   const isApiUser = user?.authSource === "api";
 
-  return (
-    <>
-      {isApiUser && (
+  // Accounts that logged in through the API: MongoDB notifications only.
+  if (isApiUser) {
+    return (
+      <>
+        <div className="dash-header">
+          <div>
+            <h1>Notifications</h1>
+            <p>Enrollments, completed courses and new messages appear here instantly.</p>
+          </div>
+        </div>
         <div className="dash-block">
           <LiveNotifications />
         </div>
-      )}
-      <DemoNotifications title={isApiUser ? "Course updates" : "Notifications"} />
-    </>
-  );
+      </>
+    );
+  }
+
+  return <DemoNotifications />;
 }

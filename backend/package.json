@@ -11,7 +11,8 @@
     "smoke": "node smoke-test.js",
     "test:socket": "node socket-test.js",
     "test:security": "node security-test.js",
-    "create-admin": "node scripts/createAdmin.js"
+    "create-admin": "node scripts/createAdmin.js",
+    "test:lms": "node lms-test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
